@@ -16,8 +16,8 @@ def tctim(im, bbox=None):
         raise TypeError('Only numpy arrays are supported!')
     if len(im.shape) not in [2, 3]:
         raise TypeError('Input has to have either 2 or 3 axes!')
-    if (len(im.shape) == 3) and (im.shape[2] not in [1, 3]):
-        raise TypeError('Last axis of input are color channels, which have to either be 1, 3 or be omitted entirely!')
+    if (len(im.shape) == 3) and (im.shape[2] not in [1, 3, 4]):
+        raise TypeError('Last axis of input are color channels, which have to either be 1, 3, 4 or be omitted entirely!')
 
     # rescale data if necessary
     if im.dtype != np.uint8:
@@ -29,6 +29,9 @@ def tctim(im, bbox=None):
     # add missing axis if omitted
     if len(im.shape) == 2:
         im = im[:,:,None]
+    # resolve alpha channel
+    if im.shape[2] == 4:
+        im = (im[:,:,:3].astype(np.float32) * im[:,:,3:].astype(np.float32) / 255.).clip(0., 255.).astype(np.uint8)
     # grayscale to rgb
     if im.shape[2] == 1:
         im = np.repeat(im, 3, axis=2)

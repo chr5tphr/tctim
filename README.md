@@ -3,6 +3,12 @@
 A tool to view images or matrices directly in your (true-color supporting) terminal.
 Great for debugging purposes!
 
+## Install using pip
+```shell
+$ pip install 'git+git://github.com/chr5tphr/tctim'
+```
+
+## Usage
 Example in Python:
 ```python
 import numpy as np

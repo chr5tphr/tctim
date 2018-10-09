@@ -37,14 +37,11 @@ def tctim(im, bbox=None):
         im = np.repeat(im, 3, axis=2)
     # pad a final line if number of rows is odd
     if im.shape[0] % 2:
-        np.concatenate([im, np.zeros([1, im.shape[1], 3], dtype=np.uint8)], axis=1)
+        im = np.concatenate([im, np.zeros([1, im.shape[1], 3], dtype=np.uint8)], axis=0)
     return _tctim(im)
 
 def imprint(im, bbox=None, file=sys.stdout, flush=False):
-    print(tctim(im, bbox), file=file, flush=flush)
+    print(tctim(im, bbox), file=file, flush=flush, end='')
 
 #def montage(images, hnum):
 #    (zip([images[ind::hnum] for ind in range(hnum)]))
-
-
-

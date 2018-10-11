@@ -11,7 +11,7 @@ def _tctim(im):
     imstr = ((COL_CLR + '\n').join(rows)) + COL_CLR
     return imstr
 
-def tctim(im, bbox=None):
+def _imgify(im, bbox=None):
     if not isinstance(im, np.ndarray):
         raise TypeError('Only numpy arrays are supported!')
     if len(im.shape) not in [2, 3]:
@@ -38,10 +38,14 @@ def tctim(im, bbox=None):
     # pad a final line if number of rows is odd
     if im.shape[0] % 2:
         im = np.concatenate([im, np.zeros([1, im.shape[1], 3], dtype=np.uint8)], axis=0)
+    return im
+
+def tctim(im, bbox=None):
+    im = _imgify(im, bbox=bbox)
     return _tctim(im)
 
 def imprint(im, bbox=None, file=sys.stdout, flush=False):
-    print(tctim(im, bbox), file=file, flush=flush)
+    print(tctim(im, bbox=bbox), file=file, flush=flush)
 
 #def montage(images, hnum):
 #    (zip([images[ind::hnum] for ind in range(hnum)]))

@@ -42,4 +42,4 @@ $ tctim /tmp/someimage.png
 
 ## Note:
 There is no limit for maximum image sizes implemented, so be careful which images you print to terminal!
-I head my terminal glitch out after I printed a rather large image.
+I had my terminal glitch out after I printed a rather large image.

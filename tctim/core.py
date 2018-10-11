@@ -41,7 +41,7 @@ def tctim(im, bbox=None):
     return _tctim(im)
 
 def imprint(im, bbox=None, file=sys.stdout, flush=False):
-    print(tctim(im, bbox), file=file, flush=flush, end='')
+    print(tctim(im, bbox), file=file, flush=flush)
 
 #def montage(images, hnum):
 #    (zip([images[ind::hnum] for ind in range(hnum)]))

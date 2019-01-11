@@ -39,7 +39,3 @@ There is also a commandline-interface included:
 ```shell
 $ tctim /tmp/someimage.png
 ```
-
-## Note:
-There is no limit for maximum image sizes implemented, so be careful which images you print to terminal!
-I had my terminal glitch out after I printed a rather large image.

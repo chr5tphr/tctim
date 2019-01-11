@@ -1,5 +1,11 @@
 import numpy as np
-import sys
+
+from sys import stdout
+from os import get_terminal_size
+from logging import getLogger
+from PIL.Image import open as imopen
+
+logger = getLogger(__name__)
 
 
 def _tctim(im):
@@ -44,8 +50,24 @@ def tctim(im, bbox=None):
     im = _imgify(im, bbox=bbox)
     return _tctim(im)
 
-def imprint(im, bbox=None, file=sys.stdout, flush=False):
+def imprint(im, bbox=None, file=stdout, flush=False):
     print(tctim(im, bbox=bbox), file=file, flush=flush)
+
+def imread(fpath, fbacksize=(64, 64)):
+    try:
+        tsize = get_terminal_size()
+        nrow, ncol = 2 * tsize.lines, tsize.columns
+    except OSError:
+        ncol, nrow = fbacksize
+
+    try:
+        im = imopen(fpath)
+    except FileNotFoundError as err:
+        logger.error(str(err))
+        return np.array([])
+
+    im.thumbnail((nrow, ncol))
+    return np.asarray(im)
 
 #def montage(images, hnum):
 #    (zip([images[ind::hnum] for ind in range(hnum)]))

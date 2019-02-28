@@ -94,7 +94,7 @@ def _montage(im, shape=None, fallback=(64, 64)):
     else:
         h, w = shape
 
-    ret = np.zeros((h * w, H, W, C), dtype=im.dtype)
+    ret = np.ones((h * w, H, W, C), dtype=im.dtype) * im.min()
     dim = min(N, h * w)
     ret[:dim] = im[:dim]
     ret = ret.reshape(h, w, H, W, C).transpose(0, 2, 1, 3, 4).reshape(h * H, w * W, C)

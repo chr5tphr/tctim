@@ -20,9 +20,9 @@ def _tctim(im):
 def _imgify(im, bbox=None):
     if not isinstance(im, np.ndarray):
         raise TypeError('Only numpy arrays are supported!')
-    if len(im.shape) not in [2, 3]:
+    if len(im.shape) not in (2, 3):
         raise TypeError('Input has to have either 2 or 3 axes!')
-    if (len(im.shape) == 3) and (im.shape[2] not in [1, 3, 4]):
+    if (len(im.shape) == 3) and (im.shape[2] not in (1, 3, 4)):
         raise TypeError('Last axis of input are color channels, which have to either be 1, 3, 4 or be omitted entirely!')
 
     # rescale data if necessary
@@ -43,15 +43,17 @@ def _imgify(im, bbox=None):
         im = np.repeat(im, 3, axis=2)
     # pad a final line if number of rows is odd
     if im.shape[0] % 2:
-        im = np.concatenate([im, np.zeros([1, im.shape[1], 3], dtype=np.uint8)], axis=0)
+        im = np.concatenate([im, np.zeros((1, im.shape[1], 3), dtype=np.uint8)], axis=0)
     return im
 
-def tctim(im, bbox=None):
+def tctim(im, montage=False, bbox=None):
+    if montage:
+        im = _montage(im)
     im = _imgify(im, bbox=bbox)
     return _tctim(im)
 
-def imprint(im, bbox=None, file=stdout, flush=False):
-    print(tctim(im, bbox=bbox), file=file, flush=flush)
+def imprint(im, montage=False, bbox=None, file=stdout, flush=False):
+    print(tctim(im, montage=montage, bbox=bbox), file=file, flush=flush)
 
 def imread(fpath, fbacksize=(64, 64)):
     try:
@@ -69,5 +71,32 @@ def imread(fpath, fbacksize=(64, 64)):
     im.thumbnail((nrow, ncol))
     return np.asarray(im)
 
-#def montage(images, hnum):
-#    (zip([images[ind::hnum] for ind in range(hnum)]))
+def _montage(im, shape=None, fallback=(64, 64)):
+    if not isinstance(im, np.ndarray):
+        raise TypeError('Only numpy arrays are supported!')
+    if len(im.shape) not in (3, 4):
+        raise TypeError('For a montage the array has to have either 3 (grayscale) or 4 (rgb) axes!')
+
+    # add missing axis if omitted
+    if len(im.shape) == 3:
+        im = im[(slice(None),)*3 + (None,)]
+
+    if shape is None:
+        try:
+            tsize = get_terminal_size()
+            nrow, ncol = 2 * tsize.lines, tsize.columns
+        except OSError:
+            ncol, nrow = fallback
+
+        N, H, W, C = im.shape
+        w = ncol // W
+        h = (N + w-1) // w
+    else:
+        h, w = shape
+
+    ret = np.zeros((h * w, H, W, C), dtype=im.dtype)
+    dim = min(N, h * w)
+    ret[:dim] = im[:dim]
+    ret = ret.reshape(h, w, H, W, C).transpose(0, 2, 1, 3, 4).reshape(h * H, w * W, C)
+
+    return ret

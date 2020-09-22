@@ -100,7 +100,7 @@ def imread(fpath):
         image = Image.open(fpath)
     except FileNotFoundError as err:
         logger.error(str(err))
-        return Image.new(((2, 2)))
+        image = Image.new(((2, 2)))
 
     return np.array(image)
 

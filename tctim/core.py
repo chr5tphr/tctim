@@ -95,16 +95,6 @@ def imprint(array, montage=False, bbox=None, fit_term=True, file=stdout, flush=F
     print(tctim(array, montage=montage, bbox=bbox, fit_term=fit_term), file=file, flush=flush)
 
 
-def imread(fpath):
-    try:
-        image = Image.open(fpath)
-    except FileNotFoundError as err:
-        logger.error(str(err))
-        image = Image.new(((2, 2)))
-
-    return np.array(image)
-
-
 def _montage(array, shape=None, fallback=(64, 64)):
     if not isinstance(array, np.ndarray):
         raise TypeError('Only numpy arrays are supported!')

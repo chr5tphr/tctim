@@ -1,21 +1,17 @@
 import sys
 from argparse import ArgumentParser
 
-from .core import imprint, imread
+import numpy as np
+from PIL import Image
+
+from .core import imprint
 
 def main():
     parser = ArgumentParser()
     parser.add_argument('filename')
     args = parser.parse_args()
 
-    #if args.filename == '-':
-    #    raw = sys.stdin.buffer.read()
-    #else:
-    #    raw = args.filename
-    raw = args.filename
-
-    im = imread(raw)
-    imprint(im)
+    imprint(np.array(Image.open(args.filename)))
 
     return 0
 

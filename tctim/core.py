@@ -41,7 +41,7 @@ def _fit_term(image, fbacksize=(64, 64)):
     return image
 
 
-def imgify(obj, bbox=None, fit_term=False):
+def imgify(obj, bbox=None):
     try:
         array = np.array(obj)
     except TypeError as err:
@@ -59,19 +59,28 @@ def imgify(obj, bbox=None, fit_term=False):
             lo, hi = array.min(), array.max()
         else:
             lo, hi = bbox
-        array = ((array - lo) * 255/(hi-lo)).clip(0, 255).astype(np.uint8)
+        array = ((array - lo) * 255 / (hi - lo)).clip(0, 255).astype(np.uint8)
 
     # add missing axis if omitted
     if len(array.shape) == 2:
-        array = array[:,:,None]
+        array = array[:, :, None]
 
     # resolve alpha channel
     if array.shape[2] == 4:
-        array = (array[:,:,:3].astype(np.float32) * array[:,:,3:].astype(np.float32) / 255.).clip(0., 255.).astype(np.uint8)
+        array = (array[:, :, :3].astype(np.float32) * array[:, :, 3:].astype(np.float32) / 255.).clip(0., 255.).astype(np.uint8)
 
     # grayscale to rgb
     if array.shape[2] == 1:
         array = np.repeat(array, 3, axis=2)
+
+    return array
+
+
+def tctim(array, montage=False, bbox=None, fit_term=True):
+    if montage:
+        array = montage(array)
+
+    array = imgify(array, bbox=bbox)
 
     # fit to terminal
     if fit_term:
@@ -81,13 +90,6 @@ def imgify(obj, bbox=None, fit_term=False):
     if array.shape[0] % 2:
         array = np.concatenate([array, np.zeros((1, array.shape[1], 3), dtype=np.uint8)], axis=0)
 
-    return array
-
-
-def tctim(array, montage=False, bbox=None, fit_term=True):
-    if montage:
-        array = montage(array)
-    array = imgify(array, bbox=bbox, fit_term=fit_term)
     return _tctim(array)
 
 

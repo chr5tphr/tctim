@@ -51,9 +51,15 @@ def imgify(obj, bbox=None):
         raise TypeError('Input has to have either 2 or 3 axes!')
 
     if (len(array.shape) == 3) and (array.shape[2] not in (1, 3, 4)):
-        raise TypeError('Last axis of input are color channels, which have to either be 1, 3, 4 or be omitted entirely!')
+        if array.shape[0] in (1, 3, 4):
+            array = array.transpose(1, 2, 0)
+        else:
+            raise TypeError(
+                'Last (or first) axis of input are color channels, '
+                'which have to either be 1, 3, 4 or be omitted entirely!'
+            )
 
-    # rescale data if necessary
+    # renormalize data if necessary
     if array.dtype != np.uint8:
         if bbox is None:
             lo, hi = array.min(), array.max()
@@ -67,7 +73,9 @@ def imgify(obj, bbox=None):
 
     # resolve alpha channel
     if array.shape[2] == 4:
-        array = (array[:, :, :3].astype(np.float32) * array[:, :, 3:].astype(np.float32) / 255.).clip(0., 255.).astype(np.uint8)
+        array = (
+            array[:, :, :3].astype(np.float32) * array[:, :, 3:].astype(np.float32) / 255.
+        ).clip(0., 255.).astype(np.uint8)
 
     # grayscale to rgb
     if array.shape[2] == 1:

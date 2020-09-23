@@ -21,7 +21,7 @@ from tctim import imprint
 
 # make some data to visualize
 grid = np.mgrid[:32, :32]
-dist = ((np.array([15.5, 15.5])[:,None,None] - grid)**2).sum(axis=0)**.5
+dist = ((np.array([15.5, 15.5])[:, None, None] - grid) ** 2).sum(axis=0) ** .5
 
 # print to console
 imprint(dist)

@@ -41,7 +41,7 @@ def _fit_term(image, fbacksize=(64, 64)):
     return image
 
 
-def imgify(obj, bbox=None, fit_term=True):
+def imgify(obj, bbox=None, fit_term=False):
     try:
         array = np.array(obj)
     except TypeError as err:

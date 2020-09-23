@@ -3,6 +3,11 @@
 A tool to view images or matrices directly in your (true-color supporting) terminal.
 Great for debugging purposes!
 
+It can visualize (`imprint`) or convert to an image representation (`imgify`) anything that
+* can be cast into a float- or int- numpy array using `numpy.array` and
+* has 2 dimensions (grayscale) or
+* 3/4 dimensions (RGB[A]) where the 1, 3 or 4 color channels come first or last.
+
 ## Install using pip
 ```shell
 $ pip install 'git+git://github.com/chr5tphr/tctim'
@@ -25,17 +30,17 @@ imprint(dist)
 col = np.stack([np.zeros_like(dist), dist, -dist], axis=-1)
 imprint(col)
 
-#================================
-# save file to read later with CLI
-from imageio import imsave
+# ================================
+# save file to visualize externally or read later with CLI
+from PIL import Image
+from tctim import imgify
 
-# rescale data
-lo, hi = col.min(), col.max()
-img = ((col - lo) * 255./(hi-lo)).clip(0., 255.).astype(np.uint8)
-imsave('/tmp/someimage.png', img)
+uint8_array = imgify(col)
+image = Image.fromarray(uint8_array)
+image.save('someimage.png')
 ```
 
-There is also a commandline-interface included:
+A command-line interface is included:
 ```shell
-$ tctim /tmp/someimage.png
+$ tctim someimage.png
 ```

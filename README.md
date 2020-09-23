@@ -6,7 +6,7 @@ Great for debugging purposes!
 It can visualize (`imprint`) or convert to an image representation (`imgify`) anything that
 * can be cast into a float- or int- numpy array using `numpy.array` and
 * has 2 dimensions (grayscale) or
-* 3/4 dimensions (RGB[A]) where the 1, 3 or 4 color channels come first or last.
+* has 3 dimensions where the 1, 3 or 4 color channels (grayscale/ RGB/ RGBA) come first or last.
 
 ## Install using pip
 ```shell

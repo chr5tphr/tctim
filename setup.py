@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='tctim',
-    version=0.1,
+    use_scm_version=True,
     packages=find_packages(),
     install_requires=['numpy>=1.14.5',
                       'Pillow>=5.4.1'],
@@ -11,7 +11,9 @@ setup(
             'tctim = tctim.cli:main'
         ]
     },
-
+    setup_requires=[
+        'setuptools_scm',
+    ],
     author='chr5tphr',
     description='Package to draw images on terminals which support true-color.'
 )

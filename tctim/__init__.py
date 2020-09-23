@@ -1,1 +1,1 @@
-from .core import tctim, imprint, _montage as montage
+from .core import tctim, imprint, montage, imgify

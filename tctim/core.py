@@ -41,7 +41,7 @@ def _fit_term(image, fbacksize=(64, 64)):
     return image
 
 
-def _imgify(obj, bbox=None, fit_term=True):
+def imgify(obj, bbox=None, fit_term=True):
     try:
         array = np.array(obj)
     except TypeError as err:
@@ -86,8 +86,8 @@ def _imgify(obj, bbox=None, fit_term=True):
 
 def tctim(array, montage=False, bbox=None, fit_term=True):
     if montage:
-        array = _montage(array)
-    array = _imgify(array, bbox=bbox, fit_term=fit_term)
+        array = montage(array)
+    array = imgify(array, bbox=bbox, fit_term=fit_term)
     return _tctim(array)
 
 
@@ -95,7 +95,7 @@ def imprint(array, montage=False, bbox=None, fit_term=True, file=stdout, flush=F
     print(tctim(array, montage=montage, bbox=bbox, fit_term=fit_term), file=file, flush=flush)
 
 
-def _montage(array, shape=None, fallback=(64, 64)):
+def montage(array, shape=None, fallback=(64, 64)):
     if not isinstance(array, np.ndarray):
         raise TypeError('Only numpy arrays are supported!')
     if len(array.shape) not in (3, 4):

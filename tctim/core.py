@@ -85,8 +85,9 @@ def imgify(obj, bbox=None):
 
 
 def tctim(array, montage=False, bbox=None, fit_term=True):
+    # dirty, but keeps the global name and parameter both simple 'montage'
     if montage:
-        array = montage(array)
+        array = globals()['montage'](array)
 
     array = imgify(array, bbox=bbox)
 
